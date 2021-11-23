@@ -17,9 +17,23 @@ struct Opt {
   #[structopt(short, long = "type")]
   ty: Option<String>,
 
-  /// Copy (Input) (default if stdout is not a tty)
+  /// Copy (Input) (default if stdin is a tty but stdout is not a tty)
   #[structopt(short, long)]
   input: bool,
+
+  /// Paste (Output) (default otherwise)
+  #[structopt(short, long)]
+  output: bool,
+
+  /// List MIME types
+  #[structopt(short, long)]
+  list: bool,
+}
+
+enum Mode {
+  Input,
+  Output,
+  Unspecified,
 }
 
 fn run<T: Clipboard>(opt: &Opt) {
@@ -27,12 +41,36 @@ fn run<T: Clipboard>(opt: &Opt) {
     if opt.clipboard { Selection::Clipboard } else { Selection::Primary }
   );
 
-  let input = opt.input || atty::is(atty::Stream::Stdout);
+  if opt.list {
+    clip.list();
+    return;
+  }
 
-  if input {
-    clip.copy(opt.ty.as_deref());
+  if opt.input && opt.output {
+    panic!("both input and output options are specified");
+  }
+  let mut mode = if opt.input {
+    Mode::Input
+  } else if opt.output {
+    Mode::Output
   } else {
-    clip.paste(opt.ty.as_deref());
+    Mode::Unspecified
+  };
+
+  if let Mode::Unspecified = mode {
+    let stdin_atty = atty::is(atty::Stream::Stdin);
+    let stdout_atty = atty::is(atty::Stream::Stdout);
+    if !stdin_atty && stdout_atty {
+      mode = Mode::Input;
+    } else {
+      mode = Mode::Output;
+    }
+  }
+
+  match mode {
+    Mode::Input => clip.copy(opt.ty.as_deref()),
+    Mode::Output => clip.paste(opt.ty.as_deref()),
+    _ => unreachable!(),
   }
 }
 
