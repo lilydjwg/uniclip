@@ -1,4 +1,4 @@
-use structopt::StructOpt;
+use clap::Parser;
 
 mod common;
 mod wayland;
@@ -6,27 +6,27 @@ mod x11;
 
 use common::{Clipboard, Selection};
 
-#[derive(StructOpt)]
-#[structopt(name = "uniclip", about = "Use the clipboard on X11 and Wayland the same way.")]
+#[derive(Parser)]
+#[clap(author, version, about, long_about = "Use the clipboard on X11 and Wayland the same way.")]
 struct Opt {
   /// Operate on the CLIPBOARD selection instead of PRIMARY
-  #[structopt(short, long)]
+  #[clap(short, long)]
   clipboard: bool,
 
   /// Specify the content MIME type
-  #[structopt(short, long = "type")]
+  #[clap(short, long = "type")]
   ty: Option<String>,
 
   /// Copy (Input) (default if stdin is a tty but stdout is not a tty)
-  #[structopt(short, long)]
+  #[clap(short, long)]
   input: bool,
 
   /// Paste (Output) (default otherwise)
-  #[structopt(short, long)]
+  #[clap(short, long)]
   output: bool,
 
   /// List MIME types
-  #[structopt(short, long)]
+  #[clap(short, long)]
   list: bool,
 }
 
