@@ -75,7 +75,7 @@ fn run<T: Clipboard>(opt: &Opt) {
 }
 
 fn main() {
-  let opt = Opt::from_args();
+  let opt = Opt::parse();
 
   let sesstype = std::env::var("XDG_SESSION_TYPE").expect("unknown session type");
   if sesstype == "wayland" {
