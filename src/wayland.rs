@@ -24,7 +24,7 @@ impl Clipboard for WlPaste {
       cmd.push("--primary");
     }
     if let Some(t) = ty {
-      cmd.extend(&["--type", t]);
+      cmd.extend(["--type", t]);
     }
 
     run_cmd(&cmd);
@@ -36,7 +36,7 @@ impl Clipboard for WlPaste {
       cmd.push("--primary");
     }
     if let Some(t) = ty {
-      cmd.extend(&["--type", t]);
+      cmd.extend(["--type", t]);
     }
 
     run_cmd(&cmd);

@@ -12,8 +12,8 @@ impl Clipboard for Xclip {
   fn list(&self) {
     let mut cmd = vec!["xclip", "-o", "-t", "TARGETS"];
     cmd.extend(match self.sel {
-      Selection::Primary => &["-selection", "primary"],
-      Selection::Clipboard => &["-selection", "clipboard"],
+      Selection::Primary => ["-selection", "primary"],
+      Selection::Clipboard => ["-selection", "clipboard"],
     });
 
     run_cmd(&cmd);
@@ -22,11 +22,11 @@ impl Clipboard for Xclip {
   fn copy(&self, ty: Option<&str>) {
     let mut cmd = vec!["xclip", "-i"];
     cmd.extend(match self.sel {
-      Selection::Primary => &["-selection", "primary"],
-      Selection::Clipboard => &["-selection", "clipboard"],
+      Selection::Primary => ["-selection", "primary"],
+      Selection::Clipboard => ["-selection", "clipboard"],
     });
     if let Some(t) = ty {
-      cmd.extend(&["-t", t]);
+      cmd.extend(["-t", t]);
     }
 
     run_cmd(&cmd);
@@ -35,11 +35,11 @@ impl Clipboard for Xclip {
   fn paste(&self, ty: Option<&str>) {
     let mut cmd = vec!["xclip", "-o"];
     cmd.extend(match self.sel {
-      Selection::Primary => &["-selection", "primary"],
-      Selection::Clipboard => &["-selection", "clipboard"],
+      Selection::Primary => ["-selection", "primary"],
+      Selection::Clipboard => ["-selection", "clipboard"],
     });
     if let Some(t) = ty {
-      cmd.extend(&["-t", t]);
+      cmd.extend(["-t", t]);
     }
 
     run_cmd(&cmd);

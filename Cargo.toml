@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "*", features = ["derive"] }
-atty = "*"
+is-terminal = "*"
 
 [profile.release]
 lto = true

@@ -1,4 +1,5 @@
 use clap::Parser;
+use is_terminal::IsTerminal;
 
 mod common;
 mod wayland;
@@ -58,8 +59,8 @@ fn run<T: Clipboard>(opt: &Opt) {
   };
 
   if let Mode::Unspecified = mode {
-    let stdin_atty = atty::is(atty::Stream::Stdin);
-    let stdout_atty = atty::is(atty::Stream::Stdout);
+    let stdin_atty = std::io::stdin().is_terminal();
+    let stdout_atty = std::io::stdout().is_terminal();
     if !stdin_atty && stdout_atty {
       mode = Mode::Input;
     } else {
