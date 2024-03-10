@@ -18,7 +18,7 @@ struct Opt {
   #[clap(short, long = "type")]
   ty: Option<String>,
 
-  /// Copy (Input) (default if stdin is a tty but stdout is not a tty)
+  /// Copy (Input) (default if stdin is not a tty but stdout is a tty)
   #[clap(short, long)]
   input: bool,
 
